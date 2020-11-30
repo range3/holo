@@ -2,13 +2,15 @@
 
 const got = require('got')
 
+const SchedulePage = require('./schedule-page')
+
 ;(async () => {
   try {
-    const response = await got('https://schedule.hololive.tv')
-    console.log(response.body)
-    //= > '<!doctype html> ...'
+    const res = await got('https://schedule.hololive.tv')
+    // console.log(res.body)
+
+    SchedulePage.scrape(res.body)
   } catch (error) {
     console.log(error.response.body)
-    //= > 'Internal server error ...'
   }
 })()
