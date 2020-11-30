@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "bin/holo",
+    "build": ":",
     "lint": "eslint --ignore-path .gitignore .",
     "test": "echo no test"
   },
