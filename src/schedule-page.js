@@ -3,35 +3,46 @@ const cheerio = require('cheerio')
 class SchedulePage {
   static scrape (html) {
     const $ = cheerio.load(html)
-    const $rows = $('#all > .container > .row')
 
-    $rows.toArray().forEach(el => {
-      const $row = $(el)
-      const $programs = $row.find('a.thumbnail')
+    return new SchedulePage(
+      $('.navbar-text, .thumbnail')
+        .toArray()
+        .reduce((acc, el) => {
+          const $i = $(el)
 
-      $programs.toArray().forEach(el2 => {
-        const $program = $(el2)
-        // console.log(
-        //   $thumbnail.css(),
-        // )
+          if ($i.hasClass('navbar-text')) {
+            const date = $i.text().match(/(?<month>\d+)\/(?<day>\d+)/)
+            if (!date) throw new Error('parse error')
 
-        const link = $program.attr('href')
-        const datetime = $program.find('.datetime')?.text()?.trim()
-        const name = $program.find('.name')?.text()?.trim()
-        const images = $program.find('img').toArray().map(el => $(el).attr('src'))
+            acc.date = {
+              month: Number(date.groups.month),
+              day: Number(date.groups.day),
+            }
+          } else if (acc.date) {
+            const images = $i.find('img').toArray().map(el => $(el).attr('src'))
+            const time = $i.find('.datetime')?.text()?.match(/(?<hour>\d+):(?<minute>\d+)/)
+            if (!time) throw new Error('parse error')
 
-        const thumbnail = images.find(url => url.startsWith('https://img.youtube.com'))
-        const avatars = images.filter(url => url.startsWith('https://yt3.ggpht.com'))
+            acc.programs.push({
+              dateTime: {
+                ...acc.date,
+                hour: Number(time.groups.hour),
+                minute: Number(time.groups.minute),
+              },
+              link: $i.attr('href'),
+              name: $i.find('.name')?.text()?.trim(),
+              thumbnail: images.find(url => url.startsWith('https://img.youtube.com')),
+              avatars: images.filter(url => url.startsWith('https://yt3.ggpht.com')),
+            })
+          }
 
-        console.log({
-          name,
-          datetime,
-          link,
-          thumbnail,
-          avatars,
-        })
-      })
-    })
+          return acc
+        }, { date: null, programs: [] }).programs,
+    )
+  }
+
+  constructor (programs = []) {
+    this.programs = programs
   }
 }
 
