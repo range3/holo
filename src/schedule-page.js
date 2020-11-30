@@ -5,7 +5,7 @@ class SchedulePage {
     const $ = cheerio.load(html)
 
     return new SchedulePage(
-      $('.navbar-text, .thumbnail')
+      $('.navbar-text, a.thumbnail')
         .toArray()
         .reduce((acc, el) => {
           const $i = $(el)
@@ -29,6 +29,7 @@ class SchedulePage {
                 hour: Number(time.groups.hour),
                 minute: Number(time.groups.minute),
               },
+              isOnTheAir: /red/.test($i.css('border')),
               link: $i.attr('href'),
               name: $i.find('.name')?.text()?.trim(),
               thumbnail: images.find(url => url.startsWith('https://img.youtube.com')),

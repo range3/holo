@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Hololive Tools for CLI",
   "main": "src/index.js",
+  "bin": {
+    "holo": "bin/holo"
+  },
   "scripts": {
     "start": "bin/holo",
     "lint": "eslint --ignore-path .gitignore .",
@@ -24,7 +27,9 @@
   },
   "homepage": "https://github.com/range3/holo#readme",
   "dependencies": {
+    "chalk": "^4.1.0",
     "cheerio": "^1.0.0-rc.3",
+    "commander": "^6.2.0",
     "got": "^11.8.0",
     "luxon": "^1.25.0",
     "terminal-image": "^1.2.1"
