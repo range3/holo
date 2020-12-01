@@ -21,7 +21,9 @@ class SchedulePage {
           } else if (acc.date) {
             const images = $i.find('img').toArray().map(el => $(el).attr('src'))
             const time = $i.find('.datetime')?.text()?.match(/(?<hour>\d+):(?<minute>\d+)/)
-            if (!time) throw new Error('parse error')
+            if (!time) {
+              return acc
+            }
 
             acc.programs.push({
               dateTime: {

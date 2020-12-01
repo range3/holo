@@ -65,6 +65,6 @@ if (!groupIds[commander.group]) {
       console.log('(', program.link, ')\n')
     }
   } catch (error) {
-    console.log(error.response.body)
+    console.error(error)
   }
 })()
