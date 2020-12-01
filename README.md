@@ -12,7 +12,12 @@ $ holo --help
 
 ### TimeZone
 Use `TZ` environment variable or `--zone` option.
-```
+```bash
 $ TZ=UTC holo
 $ holo --zone Asia/Tokyo
+```
+
+### Using Docker
+```bash
+$ docker run -it range3/holo:latest
 ```
