@@ -44,7 +44,7 @@ if (!groupIds[commander.group]) {
       schedule
         .toArray()
         .filter(program =>
-          (program.isOnTheAir && commander.current) ||
+          (program.isOnAir && commander.current) ||
           (program.dateTime <= now.plus({ hours: commander.after }) &&
             program.dateTime >= now.minus({ hours: commander.before })),
         )
@@ -57,12 +57,11 @@ if (!groupIds[commander.group]) {
           }
         }))
     for await (const program of programs) {
-      const onTheAir = program.isOnTheAir ? chalk.white.bgRed('ON THE AIR') : ''
+      const onAir = program.isOnAir ? chalk.white.bgRed('ON AIR') : ''
       if (commander.thumbnail) {
         process.stdout.write(await terminalImage.buffer(program.thumbnailBuffer, { height: commander.height }))
       }
-      console.log(program.dateTime.toLocaleString(DateTime.DATETIME_SHORT), program.name, onTheAir)
-      console.log('(', program.link, ')\n')
+      console.log(program.dateTime.toLocaleString(DateTime.DATETIME_SHORT), program.name, onAir, program.link)
     }
   } catch (error) {
     console.error(error)
