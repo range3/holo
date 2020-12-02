@@ -1,6 +1,6 @@
 {
   "name": "@range3/holo",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Hololive Tools for CLI",
   "main": "src/index.js",
   "bin": {
@@ -41,7 +41,6 @@
     "term-img": "^5.0.0"
   },
   "devDependencies": {
-    "canvas": "^2.6.1",
     "eslint": "^7.14.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
