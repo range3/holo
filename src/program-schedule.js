@@ -48,7 +48,7 @@ class ProgramSchedule {
           zone: this.zone,
           ...program.dateTime,
         }),
-        isOnTheAir: program.isOnTheAir,
+        isOnAir: program.isOnAir,
         link: program.link,
         name: program.name,
         thumbnail: program.thumbnail,

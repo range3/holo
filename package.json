@@ -1,6 +1,6 @@
 {
   "name": "@range3/holo",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Hololive Tools for CLI",
   "main": "src/index.js",
   "bin": {
@@ -32,10 +32,16 @@
     "cheerio": "^1.0.0-rc.3",
     "commander": "^6.2.0",
     "got": "^11.8.0",
+    "jimp": "^0.16.1",
+    "log-update": "^4.0.0",
     "luxon": "^1.25.0",
-    "terminal-image": "^1.2.1"
+    "render-gif": "^2.0.4",
+    "sixel": "^0.14.0",
+    "supports-sixel": "^1.0.0",
+    "term-img": "^5.0.0"
   },
   "devDependencies": {
+    "canvas": "^2.6.1",
     "eslint": "^7.14.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",

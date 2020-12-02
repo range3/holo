@@ -10,6 +10,11 @@ $ npm i -g @range3/holo
 $ holo --help
 ```
 
+### Using Docker
+```bash
+$ docker run -it range3/holo:latest --help
+```
+
 ### TimeZone
 Use `TZ` environment variable or `--zone` option.
 ```bash
@@ -17,7 +22,8 @@ $ TZ=UTC holo
 $ holo --zone Asia/Tokyo
 ```
 
-### Using Docker
-```bash
-$ docker run -it range3/holo:latest
-```
+## Sixel Graphics is supported !
+If you use a SIXEL-supported terminal such as wsltty, you will see higher resolution thumbnails.
+
+(I really hope Windows Terminal will support SIXEL.)
+- https://github.com/microsoft/terminal/issues/448

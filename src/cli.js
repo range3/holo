@@ -3,7 +3,8 @@
 const commander = require('commander')
 const chalk = require('chalk')
 const { DateTime } = require('luxon')
-const terminalImage = require('terminal-image')
+const terminalImage = require('./terminal-image')
+const supportsSixel = require('supports-sixel')
 const got = require('got')
 const ProgramSchedule = require('./program-schedule')
 
@@ -35,6 +36,7 @@ if (!groupIds[commander.group]) {
 
 ;(async () => {
   try {
+    const sixelIsSupported = await supportsSixel()
     const schedule = new ProgramSchedule({
       group: groupIds[commander.group],
       zone: commander.zone,
@@ -57,11 +59,14 @@ if (!groupIds[commander.group]) {
           }
         }))
     for await (const program of programs) {
-      const onAir = program.isOnAir ? chalk.white.bgRed('ON AIR') : ''
+      const onAir = program.isOnAir ? ` ${chalk.white.bgRed('ON AIR')}` : ''
       if (commander.thumbnail) {
-        process.stdout.write(await terminalImage.buffer(program.thumbnailBuffer, { height: commander.height }))
+        process.stdout.write(await terminalImage.buffer(program.thumbnailBuffer, { height: commander.height, sixel: sixelIsSupported }))
       }
-      console.log(program.dateTime.toLocaleString(DateTime.DATETIME_SHORT), program.name, onAir, program.link)
+      console.log(
+        `${program.dateTime.toLocaleString(DateTime.DATETIME_SHORT)}${onAir}`,
+        program.name,
+        program.link)
     }
   } catch (error) {
     console.error(error)
