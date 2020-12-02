@@ -52,7 +52,16 @@ if (!groupIds[commander.group]) {
         )
         .slice(0, commander.num)
         .map(async program => {
-          const thumbnailBuffer = commander.thumbnail ? await got(program.thumbnail).buffer() : null
+          let thumbnailBuffer = null
+          try {
+            thumbnailBuffer = commander.thumbnail ? await got(program.thumbnail).buffer() : null
+          } catch (e) {
+            if (e instanceof got.HTTPError) {
+              thumbnailBuffer = null
+            } else {
+              throw e
+            }
+          }
           return {
             thumbnailBuffer,
             ...program,
@@ -61,12 +70,14 @@ if (!groupIds[commander.group]) {
     for await (const program of programs) {
       const onAir = program.isOnAir ? ` ${chalk.white.bgRed('ON AIR')}` : ''
       if (commander.thumbnail) {
-        process.stdout.write(await terminalImage.buffer(program.thumbnailBuffer, { height: commander.height, sixel: sixelIsSupported }))
+        process.stdout.write(
+          await terminalImage.buffer(
+            program.thumbnailBuffer, { height: commander.height, sixel: sixelIsSupported }))
       }
-      console.log(
-        `${program.dateTime.toLocaleString(DateTime.DATETIME_SHORT)}${onAir}`,
-        program.name,
-        program.link)
+      process.stdout.write(
+          `${program.dateTime.toLocaleString(DateTime.DATETIME_SHORT)}${onAir} ${program.name} ${program.link}`,
+      )
+      process.stdout.write('\n')
     }
   } catch (error) {
     console.error(error)
