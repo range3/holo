@@ -12,7 +12,7 @@ $ holo --help
 
 ### Using Docker
 ```bash
-$ docker run -it range3/holo:latest --help
+$ docker run --rm -it range3/holo:latest --help
 ```
 
 ### TimeZone
@@ -23,7 +23,7 @@ $ holo --zone Asia/Tokyo
 ```
 
 ## Sixel Graphics is supported !
-If you use a SIXEL-supported terminal such as wsltty, you will see higher resolution thumbnails.
+If you use a SIXEL-supported terminal such as wsltty, you can see higher resolution thumbnails.
 
 (I really hope Windows Terminal will support SIXEL.)
 - https://github.com/microsoft/terminal/issues/448
