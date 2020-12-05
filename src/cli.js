@@ -21,35 +21,41 @@ const groupIds = {
 commander
   .name('holo')
   .option('-z, --zone <value>', 'TimeZone', process.env.TZ || 'Asia/Tokyo')
-  .option('-g, --group <type>', `Group Names (${Object.keys(groupIds).join(' | ')})`, 'live')
+  .option('-g, --group <type...>', `Group Names (${Object.keys(groupIds).join(' | ')})`, ['live'])
   .option('-n, --num <number>', 'Print n programs', Number, 100)
   .option('-b, --before <number>', 'Print programs that started later than N hours ago', Number, 1)
   .option('-a, --after <number>', 'Print programs whose broadcast start is earlier than N hours later', Number, 1)
   .option('--no-current', 'Disable printing current programs on air')
   .option('--no-thumbnail', 'Disable printing thumbnails')
-  .option('--height <number>', 'Height of thumbnails', Number, 20)
+  .option('-H, --height <number>', 'Height of thumbnails', Number, 10)
   .parse(process.argv)
 
-if (!groupIds[commander.group]) {
+if (commander.group.some(g => !groupIds[g])) {
   commander.help()
 }
+const groups = commander.group.includes('all')
+  ? [groupIds.all]
+  : Array.from(new Set(commander.group.map(g => groupIds[g])))
 
 ;(async () => {
   try {
     const sixelIsSupported = await supportsSixel()
-    const schedule = new ProgramSchedule({
-      group: groupIds[commander.group],
+
+    const schedules = groups.map(group => new ProgramSchedule({
+      group,
       zone: commander.zone,
-    })
-    await schedule.fetch()
+    }))
+    await Promise.all(schedules.map(schedule => schedule.fetch()))
+
     const programs = await Promise.all(
-      schedule
-        .toArray()
+      schedules
+        .map(schedule => schedule.toArray())
+        .flat()
         .filter(program =>
           (program.isOnAir && commander.current) ||
           (program.dateTime <= now.plus({ hours: commander.after }) &&
-            program.dateTime >= now.minus({ hours: commander.before })),
-        )
+          program.dateTime >= now.minus({ hours: commander.before })))
+        .sort((a, b) => a.dateTime - b.dateTime)
         .slice(0, commander.num)
         .map(async program => {
           let thumbnailBuffer = null
