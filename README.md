@@ -1,4 +1,5 @@
 # @range3/holo
+[![npm version](https://badge.fury.io/js/%40range3%2Fholo.svg)](https://badge.fury.io/js/%40range3%2Fholo)
 > Nyahello~~  
 > The CLI tool to display the Hololive streaming schedule.
 
@@ -12,7 +13,11 @@ $ holo --help
 
 ### Using Docker
 ```bash
-$ docker run --rm -it range3/holo:latest --help
+# For terminals that support true color (16m colors)
+$ docker run --rm -it -e COLORTERM=truecolor range3/holo:latest --help
+
+# others
+$ docker run --rm -it -e TERM range3/holo:latest --help
 ```
 
 ### TimeZone
