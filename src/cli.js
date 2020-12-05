@@ -23,8 +23,8 @@ commander
   .option('-z, --zone <value>', 'TimeZone', process.env.TZ || 'Asia/Tokyo')
   .option('-g, --group <type...>', `Group Names (${Object.keys(groupIds).join(' | ')})`, ['live'])
   .option('-n, --num <number>', 'Print n programs', Number, 100)
-  .option('-b, --before <number>', 'Print programs that started later than N hours ago', Number, 1)
-  .option('-a, --after <number>', 'Print programs whose broadcast start is earlier than N hours later', Number, 1)
+  .option('-b, --before <number>', 'Print programs that started later than N minutes ago', Number, 1)
+  .option('-a, --after <number>', 'Print programs whose broadcast start is earlier than N minutes later', Number, 1)
   .option('--no-current', 'Disable printing current programs on air')
   .option('--no-thumbnail', 'Disable printing thumbnails')
   .option('-H, --height <number>', 'Height of thumbnails', Number, 10)
@@ -53,8 +53,8 @@ const groups = commander.group.includes('all')
         .flat()
         .filter(program =>
           (program.isOnAir && commander.current) ||
-          (program.dateTime <= now.plus({ hours: commander.after }) &&
-          program.dateTime >= now.minus({ hours: commander.before })))
+          (program.dateTime <= now.plus({ minutes: commander.after }) &&
+          program.dateTime >= now.minus({ minutes: commander.before })))
         .sort((a, b) => a.dateTime - b.dateTime)
         .slice(0, commander.num)
         .map(async program => {
