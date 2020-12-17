@@ -76,9 +76,13 @@ const groups = commander.group.includes('all')
     for await (const program of programs) {
       const onAir = program.isOnAir ? ` ${chalk.white.bgRed('ON AIR')}` : ''
       if (commander.thumbnail) {
-        process.stdout.write(
-          await terminalImage.buffer(
-            program.thumbnailBuffer, { height: commander.height, sixel: sixelIsSupported }))
+        try {
+          process.stdout.write(
+            await terminalImage.buffer(
+              program.thumbnailBuffer, { height: commander.height, sixel: sixelIsSupported }))
+        } catch (err) {
+          console.error(err)
+        }
       }
       process.stdout.write(
           `${program.dateTime.toLocaleString(DateTime.DATETIME_SHORT)}${onAir} ${program.name} ${program.link}`,
